@@ -9,6 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  path_provider:
+  image_picker:
+  flutter_staggered_grid_view:
 
 dev_dependencies:
   flutter_test:
