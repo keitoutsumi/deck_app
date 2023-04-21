@@ -1,18 +1,12 @@
 class CardItem {
-  final String id;
+  final int id;
+  final String title;
   final String content;
-  final String? imagePath;
+  final String imagePath;
 
-  CardItem({required this.id, required this.content, this.imagePath});
-
-  CardItem.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        content = json['content'],
-        imagePath = json['imagePath'];
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'content': content,
-        'imagePath': imagePath,
-      };
+  CardItem(
+      {required this.id,
+      required this.title,
+      required this.content,
+      required this.imagePath});
 }

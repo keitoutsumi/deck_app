@@ -11,7 +11,9 @@ dependencies:
     sdk: flutter
   path_provider:
   image_picker:
-  flutter_staggered_grid_view:
+  image:
+  sqflite:
+  uuid:
 
 dev_dependencies:
   flutter_test:

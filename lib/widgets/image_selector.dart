@@ -3,56 +3,59 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageSelector extends StatefulWidget {
-  final String? initialImage;
-  final void Function(String imagePath) onImageSelected;
+  final Function(String) onImageSelected;
+  final String? imagePath;
 
-  ImageSelector({required this.onImageSelected, this.initialImage});
+  ImageSelector({required this.onImageSelected, this.imagePath});
 
   @override
   _ImageSelectorState createState() => _ImageSelectorState();
 }
 
 class _ImageSelectorState extends State<ImageSelector> {
-  String? _imagePath;
+  late String _imagePath;
 
   @override
   void initState() {
     super.initState();
-    _imagePath = widget.initialImage;
+    _imagePath = widget.imagePath ?? '';
   }
 
-  Future<void> _getImage() async {
+  void _getImage(ImageSource source) async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: source);
 
     if (pickedFile != null) {
       setState(() {
         _imagePath = pickedFile.path;
       });
-      widget.onImageSelected(pickedFile.path);
+      widget.onImageSelected(_imagePath);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: _getImage,
-      child: Container(
-        width: 150,
-        height: 150,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(Icons.camera),
+              onPressed: () => _getImage(ImageSource.camera),
+            ),
+            IconButton(
+              icon: Icon(Icons.photo_library),
+              onPressed: () => _getImage(ImageSource.gallery),
+            ),
+          ],
         ),
-        child: _imagePath != null
-            ? Image.file(
-                File(_imagePath!),
-                fit: BoxFit.cover,
-              )
-            : Icon(
-                Icons.add_photo_alternate,
-                color: Colors.grey,
-              ),
-      ),
+        if (_imagePath.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.file(File(_imagePath)),
+          ),
+      ],
     );
   }
 }
